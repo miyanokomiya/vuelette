@@ -1,13 +1,8 @@
-import Vue, { VueConstructor } from 'vue'
-import App from '~entry'
-import plugin from '../src/index'
+import Vue from "vue";
+import App from "./Demo.vue";
 
-Vue.use<VueConstructor>(plugin)
-
-Vue.config.productionTip = false
+Vue.config.productionTip = true;
 
 new Vue({
-  // NOTE: if you need to inject as option, you can set here!
-  // plugin,
   render: h => h(App)
-}).$mount('#app')
+}).$mount("#app");
