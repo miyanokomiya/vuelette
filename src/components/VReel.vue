@@ -7,19 +7,13 @@
       :leave-to-class="$style.leaveTo"
     >
       <span v-if="!toggled" :class="$style.board" key="front">
-        <span
-          v-for="(item, i) in frontItems"
-          :key="i"
-          :class="$style.boardItem"
-          >{{ item }}</span
+        <span v-for="(item, i) in frontItems" :key="i" :class="$style.boardItem"
+          ><slot :item="item">{{ item }}</slot></span
         >
       </span>
       <span v-else :class="$style.board" key="bach">
-        <span
-          v-for="(item, i) in backItems"
-          :key="i"
-          :class="$style.boardItem"
-          >{{ item }}</span
+        <span v-for="(item, i) in backItems" :key="i" :class="$style.boardItem"
+          ><slot :item="item">{{ item }}</slot></span
         >
       </span>
     </transition>
@@ -58,7 +52,7 @@ export default Vue.extend({
       });
     },
     backItems(): Item[] {
-      const rad = Math.floor(Math.random() * 10)
+      const rad = Math.floor(Math.random() * 10);
       return [9, 8, 7, 6, 5].map(n => {
         return this.fixed ? (this.target + n + rad) % 10 : n;
       });
@@ -140,14 +134,13 @@ export default Vue.extend({
 <style module>
 .item {
   position: relative;
-  width: 0.8em;
+  min-width: 0.8em;
   height: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  border: 1px solid blue;
 }
 .board {
   position: absolute;
