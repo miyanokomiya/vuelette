@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { sleep } from "../utils";
 
 type Item = number | string;
 
@@ -79,7 +80,7 @@ export default Vue.extend({
         if (this.toggled) {
           this.timing = "linear";
           this.toggled = !this.toggled;
-          await this.sleep();
+          await sleep(this.interval);
           this.slip();
         } else {
           this.slip();
@@ -90,7 +91,7 @@ export default Vue.extend({
       if (!this.value) return;
 
       this.toggled = !this.toggled;
-      this.sleep().then(() => {
+      sleep(this.interval).then(() => {
         if (this.timing !== "easeOut") {
           this.timing = "linear";
         }
@@ -101,31 +102,24 @@ export default Vue.extend({
       if (Math.random() < 0.2) {
         this.timing = "easeOut";
         this.toggled = !this.toggled;
-        await this.sleep();
+        await sleep(this.interval);
         this.timing = "slip";
         this.toggled = !this.toggled;
-        await this.sleep();
+        await sleep(this.interval);
         this.toggled = !this.toggled;
-        await this.sleep();
+        await sleep(this.interval);
         this.timing = "easeOut";
         this.toggled = !this.toggled;
       } else {
         this.timing = "linear";
         this.toggled = !this.toggled;
-        await this.sleep();
+        await sleep(this.interval);
         this.timing = "easeOut";
         this.toggled = !this.toggled;
       }
     },
     stop() {
       this.timing = "easeOut";
-    },
-    async sleep() {
-      return new Promise((resolve, _) => {
-        setTimeout(() => {
-          resolve();
-        }, this.interval);
-      });
     }
   }
 });
