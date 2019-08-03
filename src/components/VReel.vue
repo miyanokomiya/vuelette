@@ -68,6 +68,10 @@ export default Vue.extend({
   mounted() {
     if (this.value) this.run();
   },
+  beforeDestroy() {
+    if (!this.player) return;
+    this.player.dispose();
+  },
   methods: {
     async run() {
       if (!this.player) return;
@@ -75,10 +79,11 @@ export default Vue.extend({
       this.timing = "easeIn";
       this.step();
       await sleep(this.gradInterval);
+      if (!this.value) return
       this.timing = "linear";
       this.player.run();
     },
-    async step() {
+    step() {
       this.toggled = !this.toggled;
     },
     async stop() {
