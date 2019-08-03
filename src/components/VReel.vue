@@ -7,12 +7,12 @@
       :leave-to-class="$style.leaveTo"
     >
       <span v-if="!toggled" :class="$style.board" key="front">
-        <span v-for="(item, i) in frontItems" :key="i" :class="$style.boardItem"
+        <span v-for="(item, i) in items" :key="i" :class="$style.boardItem"
           ><slot :item="item">{{ item }}</slot></span
         >
       </span>
       <span v-else :class="$style.board" key="bach">
-        <span v-for="(item, i) in backItems" :key="i" :class="$style.boardItem"
+        <span v-for="(item, i) in items" :key="i" :class="$style.boardItem"
           ><slot :item="item">{{ item }}</slot></span
         >
       </span>
@@ -45,15 +45,9 @@ export default Vue.extend({
     };
   },
   computed: {
-    frontItems(): Item[] {
-      return [4, 3, 2, 1, 0].map(n => {
+    items(): Item[] {
+      return [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map(n => {
         return this.fixed ? (this.target + n) % 10 : n;
-      });
-    },
-    backItems(): Item[] {
-      const rad = Math.floor(Math.random() * 10);
-      return [9, 8, 7, 6, 5].map(n => {
-        return this.fixed ? (this.target + n + rad) % 10 : n;
       });
     },
     fixed(): boolean {
@@ -73,7 +67,6 @@ export default Vue.extend({
   },
   created() {
     this.player = new LoopPlayer(() => {
-      this.timing = "linear";
       this.step();
     }, this.linearInterval);
   },
@@ -87,6 +80,7 @@ export default Vue.extend({
       this.timing = "easeIn";
       this.step();
       await sleep(this.gradInterval);
+      this.timing = "linear";
       this.player.run();
     },
     async step() {
@@ -148,9 +142,9 @@ export default Vue.extend({
   transition-timing-function: linear;
 }
 .enter {
-  transform: translateY(-5em);
+  transform: translateY(-10em);
 }
 .leaveTo {
-  transform: translateY(5em);
+  transform: translateY(10em);
 }
 </style>
