@@ -21,7 +21,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      value: [false, false, false, false, false, false, false],
+      value: [false],
       running: false
     };
   },

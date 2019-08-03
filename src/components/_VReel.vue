@@ -1,18 +1,21 @@
 <template>
   <span :class="$style.item">
     <transition
-      :enter-active-class="$style[timing]"
-      :enter-class="$style.enter"
-      :leave-active-class="$style[timing]"
-      :leave-to-class="$style.leaveTo"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @before-leave="beforeLeave"
+      @leave="leave"
+      @after-leave="afterLeave"
+      :css="false"
     >
-      <span v-if="!toggled" :class="$style.board" key="front">
+      <span v-if="toggled" :class="$style.board" key="0">
         <span v-for="(item, i) in frontItems" :key="i" :class="$style.boardItem"
           ><slot :item="item">{{ item }}</slot></span
         >
       </span>
-      <span v-else :class="$style.board" key="bach">
-        <span v-for="(item, i) in backItems" :key="i" :class="$style.boardItem"
+      <span v-else :class="$style.board" key="1">
+        <span v-for="(item, i) in frontItems" :key="i" :class="$style.boardItem"
           ><slot :item="item">{{ item }}</slot></span
         >
       </span>
@@ -45,25 +48,16 @@ export default Vue.extend({
     };
   },
   computed: {
-    frontItems(): Item[] {
-      return [4, 3, 2, 1, 0].map(n => {
-        return this.fixed ? (this.target + n) % 10 : n;
-      });
+    interval(): number {
+      return 600
     },
-    backItems(): Item[] {
-      const rad = Math.floor(Math.random() * 10);
-      return [9, 8, 7, 6, 5].map(n => {
-        return this.fixed ? (this.target + n + rad) % 10 : n;
+    frontItems(): Item[] {
+      return [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map(n => {
+        return this.fixed ? (this.target + n) % 10 : n;
       });
     },
     fixed(): boolean {
       return ["easeOut", "slip"].includes(this.timing);
-    },
-    gradInterval(): number {
-      return 1000;
-    },
-    linearInterval(): number {
-      return this.gradInterval * 0.3;
     }
   },
   watch: {
@@ -72,33 +66,39 @@ export default Vue.extend({
     }
   },
   created() {
+    this.timing = "linear";
     this.player = new LoopPlayer(() => {
-      this.timing = "linear";
-      this.step();
-    }, this.linearInterval);
+      this.loop();
+    }, this.interval);
   },
   mounted() {
     if (this.value) this.run();
   },
   methods: {
-    async run() {
+    beforeEnter(el: HTMLElement) {
+      console.log(1)
+      el.style.bottom = "0";
+    },
+    enter(el: HTMLElement, done: () => void) {},
+    afterEnter(el: HTMLElement) {},
+    beforeLeave(el: HTMLElement) {},
+    leave(el: HTMLElement, done: () => void) {},
+    afterLeave(el: HTMLElement) {
+      console.log(1)
+      el.style.top = "0";
+    },
+    run() {
       if (!this.player) return;
-
-      this.timing = "easeIn";
-      this.step();
-      await sleep(this.gradInterval);
       this.player.run();
     },
-    async step() {
+    loop() {
       this.toggled = !this.toggled;
     },
-    async stop() {
+    stop() {
       if (!this.player) return;
-
-      await this.player.stop();
-      await sleep(this.linearInterval);
-      this.timing = "easeOut";
-      this.step();
+      this.player.stop().then(() => {
+        console.log("after end");
+      });
     }
   }
 });
@@ -121,7 +121,7 @@ export default Vue.extend({
   flex-direction: column;
   justify-content: center;
   overflow: visible;
-  bottom: 0;
+  top: 0;
 }
 .boardItem {
   line-height: 1em;
