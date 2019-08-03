@@ -24,8 +24,6 @@
 import Vue from "vue";
 import { sleep, LoopPlayer } from "../utils";
 
-type Item = number | string;
-
 export default Vue.extend({
   props: {
     value: {
@@ -45,13 +43,10 @@ export default Vue.extend({
     };
   },
   computed: {
-    items(): Item[] {
+    items(): number[] {
       return [9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map(n => {
-        return this.fixed ? (this.target + n) % 10 : n;
+        return (this.target + n) % 10;
       });
-    },
-    fixed(): boolean {
-      return ["easeOut", "slip"].includes(this.timing);
     },
     gradInterval(): number {
       return 1000;
