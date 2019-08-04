@@ -34,20 +34,28 @@ export default Vue.extend({
   },
   computed: {
     targets(): number[] {
-      const valueStr = `${this.value}`.padStart(this.digit, "0");
+      const valueStr = `${Math.floor(this.value)}`.padStart(this.digit, "0");
       return Array.from(valueStr).map(s => parseInt(s));
     }
   },
   watch: {
     running(to) {
       if (to) {
-        this.resetReels = true
+        this.resetReels = true;
         this.$nextTick(() => {
-          this.resetReels = false
+          this.resetReels = false;
           this.gradToggle(to);
-        })
+        });
       } else {
         this.gradToggle(to);
+      }
+    },
+    digit() {
+      this.initReels(this.digit);
+    },
+    value() {
+      if (this.digit < this.targets.length) {
+        this.initReels(this.targets.length);
       }
     }
   },
@@ -56,12 +64,15 @@ export default Vue.extend({
     this.gradToggle(true);
   },
   methods: {
+    initReels(length: number) {
+      this.reels = [...Array(length)].map(() => this.running);
+    },
     gradToggle(val: boolean) {
-      const timestamp = Date.now()
-      this.timestamp = timestamp
+      const timestamp = Date.now();
+      this.timestamp = timestamp;
       this.reels.forEach(async (v, i) => {
         await sleep(val ? this.easeIn(i) : this.easeOut(i));
-        if (timestamp !== this.timestamp) return
+        if (timestamp !== this.timestamp) return;
         Vue.set(this.reels, i, val);
       });
     },
