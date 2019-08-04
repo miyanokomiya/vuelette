@@ -33,6 +33,10 @@ export default Vue.extend({
     target: {
       type: Number,
       default: 7
+    },
+    fastStop: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -97,6 +101,8 @@ export default Vue.extend({
       if (!this.player) return;
 
       await this.player.stop();
+      if (this.fastStop) return
+
       await sleep(this.linearInterval);
       this.timing = "easeOut";
       this.step();

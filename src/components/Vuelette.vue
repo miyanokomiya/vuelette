@@ -1,7 +1,13 @@
 <template>
   <div :class="$style.container">
     <template v-if="!resetReels">
-      <VReel v-for="(v, i) in reels" :key="i" :value="v" :target="targets[i]">
+      <VReel
+        v-for="(v, i) in reels"
+        :key="i"
+        :value="v"
+        :target="targets[i]"
+        :fastStop="fastStop"
+      >
         <template v-slot="{ item }">
           <slot :item="item">{{ item }}</slot>
         </template>
@@ -23,7 +29,11 @@ export default Vue.extend({
     running: { type: Boolean, required: true },
     digit: { type: Number, default: 4 },
     delay: { type: Number, default: 500 },
-    value: { type: Number, default: 7777 }
+    value: { type: Number, default: 7777 },
+    fastStop: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

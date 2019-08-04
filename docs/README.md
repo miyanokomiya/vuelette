@@ -1,10 +1,16 @@
 # Introduction
 
-`Vuelette` plugin is plugin for [Vue.js](http://vuejs.org).
-Features include:
+`Vuelette` is a roulette like component for [Vue.js](http://vuejs.org).
 
-- Feature1
-- Feature2
-- ...
+## Gif
+![Kapture 2019-08-04 at 20 51 28](https://user-images.githubusercontent.com/20733354/62423269-f54bac80-b6f9-11e9-8a5f-07deb64c5ffa.gif)
 
-[Get started](./started/) or play with the [demo](https://github.com//vuelette/tree/dev/demo) (see [`README.md`](https://github.com//vuelette/) to run them).
+## Demo
+```sh
+$ yarn demo
+```
+
+## [Usage](https://github.com/miyanokomiya/vuelette/blob/master/demo/Demo.vue)
+
+## Get started
+TODO

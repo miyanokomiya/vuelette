@@ -1,16 +1,17 @@
 <template>
   <div class="demo">
     <h1>Plugin Demo</h1>
-    <div class="rulettes">
+    <div class="roulettes">
       <Vuelette
         v-for="i in [0, 1, 2]"
         :key="i"
         :running="running"
         :digit="digit"
         :value="target"
-        :delay="100 + 500 * i"
-        :class="`rulette_${i}`"
-        class="rulette"
+        :delay="300 * (i + 1)"
+        :fastStop="fastStop"
+        :class="`roulette_${i}`"
+        class="roulette"
       >
         <template v-slot="{ item }">
           <span>{{ item }}</span>
@@ -30,7 +31,18 @@
       <div>
         <label>
           <span>Target: </span>
-          <input type="number" min="1" :max="'9'.repeat(10)" v-model="targetStr" />
+          <input
+            type="number"
+            min="1"
+            :max="'9'.repeat(10)"
+            v-model="targetStr"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          <span>Fast Stop: </span>
+          <input type="checkbox" v-model="fastStop" />
         </label>
       </div>
     </div>
@@ -50,7 +62,8 @@ export default Vue.extend({
     return {
       running: false,
       targetStr: "77777",
-      digitStr: "5"
+      digitStr: "5",
+      fastStop: false
     };
   },
   computed: {
@@ -70,24 +83,24 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.rulettes {
+.roulettes {
   padding: 1rem 0;
 }
-.rulette {
+.roulette {
   margin-right: 1rem;
   border: 1px solid black;
   border-radius: 8px;
 }
-.rulette_0 {
+.roulette_0 {
   font-size: 2rem;
   color: green;
 }
-.rulette_1 {
+.roulette_1 {
   font-size: 2rem;
   font-weight: 600;
   color: red;
 }
-.rulette_2 {
+.roulette_2 {
   font-size: 3rem;
   color: blue;
 }
@@ -97,11 +110,12 @@ button {
 }
 .configs label {
   display: flex;
+  align-items: center;
 }
 .configs span {
-  width: 4rem;
+  min-width: 4rem;
 }
-.configs input {
+.configs input[type="number"] {
   width: 6rem;
 }
 </style>
