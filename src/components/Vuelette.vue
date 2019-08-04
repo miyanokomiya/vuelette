@@ -1,10 +1,12 @@
 <template>
   <div :class="$style.container">
-    <VReel v-for="(v, i) in reels" :key="i" :value="v" :target="targets[i]">
-      <template v-slot="{ item }">
-        <slot :item="item">{{ item }}</slot>
-      </template>
-    </VReel>
+    <template v-if="!resetReels">
+      <VReel v-for="(v, i) in reels" :key="i" :value="v" :target="targets[i]">
+        <template v-slot="{ item }">
+          <slot :item="item">{{ item }}</slot>
+        </template>
+      </VReel>
+    </template>
   </div>
 </template>
 
@@ -25,7 +27,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      reels: [...Array(this.digit)].map(() => false)
+      reels: [...Array(this.digit)].map(() => false),
+      resetReels: false,
+      timestamp: 0
     };
   },
   computed: {
@@ -36,7 +40,15 @@ export default Vue.extend({
   },
   watch: {
     running(to) {
-      this.gradToggle(to);
+      if (to) {
+        this.resetReels = true
+        this.$nextTick(() => {
+          this.resetReels = false
+          this.gradToggle(to);
+        })
+      } else {
+        this.gradToggle(to);
+      }
     }
   },
   mounted() {
@@ -45,8 +57,11 @@ export default Vue.extend({
   },
   methods: {
     gradToggle(val: boolean) {
+      const timestamp = Date.now()
+      this.timestamp = timestamp
       this.reels.forEach(async (v, i) => {
         await sleep(val ? this.easeIn(i) : this.easeOut(i));
+        if (timestamp !== this.timestamp) return
         Vue.set(this.reels, i, val);
       });
     },

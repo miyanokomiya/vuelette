@@ -39,7 +39,7 @@ export default Vue.extend({
     return {
       player: null as LoopPlayer | null,
       toggled: false,
-      timing: "easeIn" as "easeIn" | "linear" | "easeOut" | "slip"
+      timing: "easeIn" as "easeIn" | "linear" | "easeOut"
     };
   },
   computed: {
@@ -61,25 +61,32 @@ export default Vue.extend({
     }
   },
   created() {
-    this.player = new LoopPlayer(() => {
-      this.step();
-    }, this.linearInterval);
+    this.initPlayer();
   },
   mounted() {
     if (this.value) this.run();
   },
   beforeDestroy() {
-    if (!this.player) return;
-    this.player.dispose();
+    this.disposePlayer();
   },
   methods: {
+    initPlayer() {
+      this.disposePlayer();
+      this.player = new LoopPlayer(() => {
+        this.step();
+      }, this.linearInterval);
+    },
+    disposePlayer() {
+      if (!this.player) return;
+      this.player.dispose();
+    },
     async run() {
       if (!this.player) return;
 
       this.timing = "easeIn";
       this.step();
       await sleep(this.gradInterval);
-      if (!this.value) return
+      if (!this.value) return;
       this.timing = "linear";
       this.player.run();
     },
@@ -134,11 +141,6 @@ export default Vue.extend({
 .linear {
   transition-property: all;
   transition-duration: 300ms;
-  transition-timing-function: linear;
-}
-.slip {
-  transition-property: all;
-  transition-duration: 1000ms;
   transition-timing-function: linear;
 }
 .enter {
