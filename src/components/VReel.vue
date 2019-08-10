@@ -101,7 +101,7 @@ export default Vue.extend({
       if (!this.player) return;
 
       await this.player.stop();
-      if (this.fastStop) return
+      if (this.fastStop) return;
 
       await sleep(this.linearInterval);
       this.timing = "easeOut";

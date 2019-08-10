@@ -5,10 +5,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "demo": "vue-cli-service demo",
-    "docs": "npm run docs:serve",
-    "docs:build": "vue-cli-service docs --mode build",
-    "docs:serve": "vue-cli-service docs --mode serve",
-    "prepublish": "vue-cli-service lint && vue-cli-service docs --mode build && vue-cli-service build",
+    "prepublish": "vue-cli-service lint && vue-cli-service build",
     "test:unit": "vue-cli-service test:unit"
   },
   "main": "dist/vuelette.common.js",
