@@ -1,2 +1,2 @@
-import HelloWorld from "./components/HelloWorld.vue";
-export default HelloWorld;
+import Vuelette from "./components/Vuelette.vue";
+export default Vuelette;
